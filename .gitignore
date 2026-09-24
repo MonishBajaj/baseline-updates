@@ -1,0 +1,43 @@
+# Dependencies & build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+**/secrets/**
+
+# Python / MATLAB scratch
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.mat
+*.asv
+octave-workspace
+
+# Logs & editors
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Large unused local image dumps (dashboard serves public/img/)
+dashboard/Img/

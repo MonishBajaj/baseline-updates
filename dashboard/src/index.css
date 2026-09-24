@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  /* UGA color theme — use these tokens throughout, no deviations */
+  --color-uga-red: #ba0c2f;
+  --color-uga-black: #000000;
+  --color-uga-white: #ffffff;
+  --color-uga-light-gray: #f5f5f5;
+  --color-uga-mid-gray: #e0e0e0;
+  --color-uga-dark-gray: #4a4a4a;
+  --color-uga-accent: #c8102e;
+  --color-uga-sidebar-bg: #1a1a1a;
+  --color-uga-navy: #1a2744;
+  --color-uga-sidebar-text: #f5f5f5;
+  --color-uga-sidebar-active: #ba0c2f;
+  --color-uga-card-border: #e0e0e0;
+  --color-uga-success: #2e7d32;
+  --color-uga-warning: #f57c00;
+  --color-uga-danger: #c62828;
+
+  /* threshold bar colors — consistent across all charts */
+  --color-thresh-gt1: #388e3c;
+  --color-thresh-gt5: #1976d2;
+  --color-thresh-gt10: #f57c00;
+  --color-thresh-gt20: #c62828;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  /* Base rem size — scales all Tailwind text-* utilities dashboard-wide */
+  font-size: 20px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-uga-light-gray);
+  color: var(--color-uga-dark-gray);
+}
