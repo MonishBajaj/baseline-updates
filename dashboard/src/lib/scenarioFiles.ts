@@ -70,9 +70,9 @@ export function resolveScenarioFilename(config: FarmCharacteristicsConfig): stri
       if (config.irrigationStopDays === 10) return 'S_irrigation_stop at 10 d.json';
       return null;
     case 'irrigationVolumeFactor':
-      if (config.irrigationVolumeFactor === 0.75) return 'S_irrigation_volume_75pct.json';
+      if (config.irrigationVolumeFactor === 0.75) return 'S_irrigation_volume_25pct.json';
       if (config.irrigationVolumeFactor === 0.5) return 'S_irrigation_volume_50pct.json';
-      if (config.irrigationVolumeFactor === 0.25) return 'S_irrigation_volume_25pct.json';
+      if (config.irrigationVolumeFactor === 0.25) return 'S_irrigation_volume_75pct.json';
       return null;
     case 'regulatoryStandard':
       if (config.regulatoryStandard === 'non_fda_approved') return 'S_irrigation_FDA_not approved.json';
