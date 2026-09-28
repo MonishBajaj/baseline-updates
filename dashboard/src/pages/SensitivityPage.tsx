@@ -4,159 +4,18 @@ import { YearRoundLineChart } from '@/components/charts/YearRoundLineChart';
 import { Card, CardContent } from '@/components/ui/Card';
 import { InsightBox } from '@/components/ui/InsightBox';
 import { MetricCard } from '@/components/ui/MetricCard';
-import { BOTH_COLORS, IRRIGATION_COLORS, WILDLIFE_COLORS } from '@/constants';
 import { cn } from '@/lib/utils';
+import {
+  SWEEPS,
+  buildSweep,
+  colorsForSweep,
+  dailyRow,
+  monthThreshRow,
+  referenceIndex,
+  type SweepId,
+  type SweepSources,
+} from '@/lib/sensitivitySweeps';
 import { useDataStore } from '@/store/dataStore';
-import type { IntensityData, PrevalenceData, SweepThresholdByMonth } from '@/types';
-
-export type SweepId =
-  | 'wildlife_intensity'
-  | 'irrigation_intensity'
-  | 'wildlife_prevalence'
-  | 'irrigation_prevalence'
-  | 'both_prevalence';
-
-const SWEEPS: {
-  id: SweepId;
-  label: string;
-  group: 'Intensity' | 'Prevalence';
-  description: string;
-}[] = [
-  {
-    id: 'wildlife_intensity',
-    label: 'Wildlife intensity',
-    group: 'Intensity',
-    description: 'Wildlife fecal load 20–200%; irrigation held at 100%.',
-  },
-  {
-    id: 'irrigation_intensity',
-    label: 'Irrigation intensity',
-    group: 'Intensity',
-    description: 'Irrigation CFU 20–200%; wildlife held at 100%.',
-  },
-  {
-    id: 'wildlife_prevalence',
-    label: 'Wildlife prevalence',
-    group: 'Prevalence',
-    description: 'Chance a wildlife event is contaminated, 0–100%.',
-  },
-  {
-    id: 'irrigation_prevalence',
-    label: 'Irrigation prevalence',
-    group: 'Prevalence',
-    description: 'Chance an irrigation event is contaminated, 0–100%.',
-  },
-  {
-    id: 'both_prevalence',
-    label: 'Combined prevalence',
-    group: 'Prevalence',
-    description: 'Both sources share the same contamination probability.',
-  },
-];
-
-const EMPTY_DAYS = Array.from({ length: 365 }, () => 0);
-const EMPTY_MONTH_THRESH = Array.from({ length: 12 }, () => [0, 0, 0, 0]);
-
-function dailyRow(rows: number[][] | undefined, idx: number): number[] {
-  const row = rows?.[idx];
-  return Array.isArray(row) && row.length > 0 ? row : EMPTY_DAYS;
-}
-
-function monthThreshRow(block: SweepThresholdByMonth | undefined, idx: number): number[][] {
-  const level = block?.meanPct?.[idx];
-  if (!Array.isArray(level) || level.length === 0) return EMPTY_MONTH_THRESH;
-  return level;
-}
-
-function colorsForSweep(id: SweepId): string[] {
-  if (id === 'irrigation_intensity' || id === 'irrigation_prevalence') return IRRIGATION_COLORS;
-  if (id === 'both_prevalence') return BOTH_COLORS;
-  return WILDLIFE_COLORS;
-}
-
-function referenceIndex(labels: string[]): number {
-  const exact = labels.findIndex((label) => label === '100%');
-  return exact >= 0 ? exact : Math.max(0, labels.length - 1);
-}
-
-interface SweepView {
-  id: SweepId;
-  title: string;
-  description: string;
-  labels: string[];
-  dailyP50: number[][];
-  thresholdByMonth?: SweepThresholdByMonth;
-  harvestMedian?: number[];
-}
-
-function buildSweep(
-  id: SweepId,
-  wildlife: IntensityData | null,
-  irrigation: IntensityData | null,
-  wildlifePrevalence: PrevalenceData | null,
-  irrigationPrevalence: PrevalenceData | null,
-  bothPrevalence: PrevalenceData | null,
-): SweepView | null {
-  const meta = SWEEPS.find((s) => s.id === id);
-  if (!meta) return null;
-
-  if (id === 'wildlife_intensity' && wildlife) {
-    return {
-      id,
-      title: meta.label,
-      description: meta.description,
-      labels: wildlife.labels,
-      dailyP50: wildlife.daily.p50,
-      thresholdByMonth: wildlife.thresholdByMonth,
-      harvestMedian: wildlife.harvestDay.median,
-    };
-  }
-  if (id === 'irrigation_intensity' && irrigation) {
-    return {
-      id,
-      title: meta.label,
-      description: meta.description,
-      labels: irrigation.labels,
-      dailyP50: irrigation.daily.p50,
-      thresholdByMonth: irrigation.thresholdByMonth,
-      harvestMedian: irrigation.harvestDay.median,
-    };
-  }
-  if (id === 'wildlife_prevalence' && wildlifePrevalence) {
-    return {
-      id,
-      title: meta.label,
-      description: meta.description,
-      labels: wildlifePrevalence.labels,
-      dailyP50: wildlifePrevalence.daily.p50,
-      thresholdByMonth: wildlifePrevalence.thresholdByMonth,
-      harvestMedian: wildlifePrevalence.harvestDay.median,
-    };
-  }
-  if (id === 'irrigation_prevalence' && irrigationPrevalence) {
-    return {
-      id,
-      title: meta.label,
-      description: meta.description,
-      labels: irrigationPrevalence.labels,
-      dailyP50: irrigationPrevalence.daily.p50,
-      thresholdByMonth: irrigationPrevalence.thresholdByMonth,
-      harvestMedian: irrigationPrevalence.harvestDay.median,
-    };
-  }
-  if (id === 'both_prevalence' && bothPrevalence) {
-    return {
-      id,
-      title: meta.label,
-      description: meta.description,
-      labels: bothPrevalence.labels,
-      dailyP50: bothPrevalence.daily.p50,
-      thresholdByMonth: bothPrevalence.thresholdByMonth,
-      harvestMedian: bothPrevalence.harvestDay.median,
-    };
-  }
-  return null;
-}
 
 export function SensitivityPage() {
   const wildlife = useDataStore((s) => s.wildlife);
@@ -168,18 +27,12 @@ export function SensitivityPage() {
   const [sweepId, setSweepId] = useState<SweepId>('wildlife_intensity');
   const [levelIdx, setLevelIdx] = useState(4);
 
-  const sweep = useMemo(
-    () =>
-      buildSweep(
-        sweepId,
-        wildlife,
-        irrigation,
-        wildlifePrevalence,
-        irrigationPrevalence,
-        bothPrevalence,
-      ),
-    [sweepId, wildlife, irrigation, wildlifePrevalence, irrigationPrevalence, bothPrevalence],
+  const sources = useMemo<SweepSources>(
+    () => ({ wildlife, irrigation, wildlifePrevalence, irrigationPrevalence, bothPrevalence }),
+    [wildlife, irrigation, wildlifePrevalence, irrigationPrevalence, bothPrevalence],
   );
+
+  const sweep = useMemo(() => buildSweep(sweepId, sources), [sweepId, sources]);
 
   useEffect(() => {
     if (!sweep) return;
@@ -256,27 +109,13 @@ export function SensitivityPage() {
         </p>
       </div>
 
-      <div className="rounded-md border border-uga-warning/40 bg-uga-warning/5 px-4 py-3 text-base text-uga-dark-gray">
-        Showing the 2-iteration pond/well test export. Use this page to confirm plots and the slider;
-        harvest percentages will look jumpy until the 1000-iteration run is copied in.
-      </div>
-
       <Card>
         <CardContent className="space-y-5">
           <div>
             <p className="mb-2 text-base font-semibold text-uga-black">Sensitivity sweep</p>
             <div className="flex flex-wrap gap-2">
               {SWEEPS.map((item) => {
-                const available = Boolean(
-                  buildSweep(
-                    item.id,
-                    wildlife,
-                    irrigation,
-                    wildlifePrevalence,
-                    irrigationPrevalence,
-                    bothPrevalence,
-                  ),
-                );
+                const available = Boolean(buildSweep(item.id, sources));
                 return (
                   <button
                     key={item.id}
@@ -341,11 +180,11 @@ export function SensitivityPage() {
             <MetricCard label="Selected level" value={selectedLabel} />
             <MetricCard
               label="Median soil CFU on harvest day"
-              value={harvestMedian != null ? harvestMedian.toExponential(2) : '—'}
+              value={harvestMedian != null ? harvestMedian.toFixed(2) : '—'}
             />
             <MetricCard
               label={`Reference ${refLabel} harvest-day CFU`}
-              value={harvestMedianRef != null ? harvestMedianRef.toExponential(2) : '—'}
+              value={harvestMedianRef != null ? harvestMedianRef.toFixed(2) : '—'}
             />
           </div>
 

@@ -5,7 +5,7 @@ import { useDataStore } from '@/store/dataStore';
 import { useScenarioStore } from '@/store/scenarioStore';
 import { BaselinePage } from '@/pages/BaselinePage';
 import { IntroductionPage } from '@/pages/IntroductionPage';
-import { AwaitingDataPage } from '@/pages/AwaitingDataPage';
+import { ComparisonPage } from '@/pages/ComparisonPage';
 import { SensitivityPage } from '@/pages/SensitivityPage';
 import { ReferencesPage } from '@/pages/ReferencesPage';
 
@@ -52,13 +52,7 @@ function App() {
           {activeTab === 'introduction' && <IntroductionPage />}
           {activeTab === 'baseline' && <BaselinePage />}
           {activeTab === 'sensitivity' && <SensitivityPage />}
-          {activeTab === 'comparison' && (
-            <AwaitingDataPage
-              pageTitle="Comparison"
-              description="Build up to 4 custom scenarios (source + intensity level) and compare them side by side."
-              requiredFiles={['wildlife_intensity.json', 'irrigation_intensity.json']}
-            />
-          )}
+          {activeTab === 'comparison' && <ComparisonPage />}
           {activeTab === 'references' && <ReferencesPage />}
         </div>
       </main>

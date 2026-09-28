@@ -1,4 +1,4 @@
-import { BookOpen, BarChart2, TrendingUp, GitCompare, Library, MapPin, Sprout, RefreshCw, CalendarDays } from 'lucide-react';
+import { BookOpen, BarChart2, TrendingUp, GitCompare, Library } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useScenarioStore, type PageId } from '@/store/scenarioStore';
 import { useDataStore } from '@/store/dataStore';
@@ -13,11 +13,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { id: 'introduction', label: 'Introduction', icon: <BookOpen size={16} />, desc: 'About this dashboard', requiresScenarioData: false },
-  { id: 'baseline', label: 'Baseline & Scenarios', icon: <BarChart2 size={16} />, desc: 'Default season and farm what-ifs', requiresScenarioData: false },
-  { id: 'sensitivity', label: 'Sensitivity Analysis', icon: <TrendingUp size={16} />, desc: 'Full gradient overview', requiresScenarioData: true },
-  { id: 'comparison', label: 'Comparison', icon: <GitCompare size={16} />, desc: 'Compare up to 4 scenarios', requiresScenarioData: true },
-  { id: 'references', label: 'References', icon: <Library size={16} />, desc: 'Sources and citations', requiresScenarioData: false },
+  { id: 'introduction', label: 'Overview', icon: <BookOpen size={16} />, desc: 'Model scope and structure', requiresScenarioData: false },
+  { id: 'baseline', label: 'Baseline & Scenarios', icon: <BarChart2 size={16} />, desc: 'Explore farm conditions', requiresScenarioData: false },
+  { id: 'sensitivity', label: 'Sensitivity Analysis', icon: <TrendingUp size={16} />, desc: 'Explore parameter effects', requiresScenarioData: true },
+  { id: 'comparison', label: 'Scenario Comparison', icon: <GitCompare size={16} />, desc: 'Compare selected scenarios', requiresScenarioData: true },
+  { id: 'references', label: 'Model & Data Sources', icon: <Library size={16} />, desc: 'Assumptions and references', requiresScenarioData: false },
 ];
 
 export function Sidebar() {
@@ -63,20 +63,12 @@ export function Sidebar() {
       </nav>
 
       <div className="border-t border-white/10 p-4">
-        <p className="mb-2 text-sm tracking-wide text-white/40 uppercase">Field Parameters</p>
-        <div className="space-y-1.5">
-          <p className="flex items-center gap-1.5 text-base text-white/70">
-            <MapPin size={14} className="text-white/40" /> {FIELD_INFO.location}
-          </p>
-          <p className="flex items-center gap-1.5 text-base text-white/70">
-            <Sprout size={14} className="text-white/40" /> {FIELD_INFO.fieldSize} · {FIELD_INFO.totalPlants.toLocaleString()} plants
-          </p>
-          <p className="flex items-center gap-1.5 text-base text-white/70">
-            <RefreshCw size={14} className="text-white/40" /> n = {iterations ? iterations.toLocaleString() : 'N/A'} iterations
-          </p>
-          <p className="flex items-center gap-1.5 text-base text-white/70">
-            <CalendarDays size={14} className="text-white/40" /> {FIELD_INFO.fiscalYearStart} fiscal year start
-          </p>
+        <p className="mb-2 text-sm font-medium tracking-wide text-white/40">Model Setup</p>
+        <div className="space-y-1.5 text-base text-white/70">
+          <p>Region: {FIELD_INFO.location}</p>
+          <p>Field size: {FIELD_INFO.fieldSize}</p>
+          <p>Plants: {FIELD_INFO.totalPlants.toLocaleString()}</p>
+          <p>Simulation runs: {iterations ? iterations.toLocaleString() : 'N/A'}</p>
         </div>
       </div>
     </aside>

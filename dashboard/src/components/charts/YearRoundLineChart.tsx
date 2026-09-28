@@ -41,14 +41,14 @@ export function YearRoundLineChart({ lines, title, subtitle, height = 300 }: Yea
               dataKey="day"
               ticks={MONTH_TICKS}
               tickFormatter={(v: number) => MONTH_LABELS[MONTH_TICKS.indexOf(v)] ?? ''}
-              label={{ value: 'Month (Jul-Jun)', position: 'insideBottom', offset: -26, fontSize: 20 }}
+              label={{ value: 'Month', position: 'insideBottom', offset: -26, fontSize: 20 }}
               tick={{ fontSize: 18 }}
             />
             <YAxis
               width={64}
               tickMargin={10}
               label={{
-                value: 'log\u2081\u2080(CFU)',
+                value: 'log10 (CFU/g) soil',
                 angle: -90,
                 position: 'left',
                 offset: 18,

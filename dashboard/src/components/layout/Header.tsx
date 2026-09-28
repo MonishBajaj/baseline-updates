@@ -12,8 +12,8 @@ export function Header() {
       </div>
 
       <div className="hidden text-center sm:block">
-        <h1 className="text-xl font-bold tracking-wide text-white">Sweet Onion E. coli Risk Assessment</h1>
-        <p className="text-base text-white/70">System Model Dashboard</p>
+        <h1 className="text-xl font-bold tracking-wide text-white">Onion E. coli Risk Dashboard</h1>
+        <p className="text-base text-white/70">Preharvest system model</p>
       </div>
     </header>
   );

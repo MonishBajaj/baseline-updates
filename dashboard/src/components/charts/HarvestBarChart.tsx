@@ -42,19 +42,19 @@ export function HarvestBarChart({ threshByMonth, title, subtitle }: HarvestBarCh
         {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={340}>
-          <BarChart data={chartData} margin={{ top: 12, right: 20, bottom: 36, left: 40 }}>
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart data={chartData} margin={{ top: 28, right: 20, bottom: 40, left: 48 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
             <XAxis
               dataKey="month"
-              label={{ value: 'Harvest Month', position: 'insideBottom', offset: -14, fontSize: 20 }}
+              label={{ value: 'Harvest month', position: 'insideBottom', offset: -14, fontSize: 20 }}
               tick={{ fontSize: 18 }}
             />
             <YAxis
               width={84}
               tickMargin={10}
               label={{
-                value: '% of Plants Exceeding Threshold',
+                value: 'Percent of onions exceeding threshold',
                 angle: -90,
                 position: 'left',
                 offset: 22,
@@ -63,7 +63,9 @@ export function HarvestBarChart({ threshByMonth, title, subtitle }: HarvestBarCh
               }}
               tick={{ fontSize: 18 }}
               tickFormatter={formatAxisPct}
-              domain={[0, 'auto']}
+              domain={[0, 100]}
+              ticks={[0, 25, 50, 75, 100]}
+              allowDataOverflow
             />
             <Tooltip
               formatter={(v, name) => [formatTooltipPct(Number(v)), name]}

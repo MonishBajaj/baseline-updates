@@ -1,6 +1,6 @@
 import { withBase } from '@/lib/publicUrl';
 
-/** Canonical names written next to the dashboard when a full Scenario run is copied in. */
+/** Canonical names preferred when a full Scenario run is copied into public/data/. */
 export const SENSITIVITY_CANONICAL_FILES = {
   wildlifeIntensity: 'wildlife_intensity.json',
   irrigationIntensity: 'irrigation_intensity.json',
@@ -9,7 +9,7 @@ export const SENSITIVITY_CANONICAL_FILES = {
   bothPrevalence: 'both_prevalence.json',
 } as const;
 
-/** 2-iteration pond/well test export currently in public/data/Sensitivity file/export (3)/ */
+/** Pond/well 50% blend sensitivity export under public/data/export_fin_Sensitivity/. */
 export const SENSITIVITY_TEST_FILES = {
   wildlifeIntensity: 'wildlife_intensity_pond_well_50pct.json',
   irrigationIntensity: 'irrigation_intensity_pond_well_50pct.json',
@@ -18,7 +18,7 @@ export const SENSITIVITY_TEST_FILES = {
   bothPrevalence: 'both_prevalence_pond_well_50pct.json',
 } as const;
 
-const TEST_EXPORT_SEGMENTS = ['data', 'Sensitivity file', 'export (3)'] as const;
+const TEST_EXPORT_SEGMENTS = ['data', 'export_fin_Sensitivity'] as const;
 
 export function sensitivityTestDataUrl(filename: string): string {
   return withBase([...TEST_EXPORT_SEGMENTS, filename].map(encodeURIComponent).join('/'));

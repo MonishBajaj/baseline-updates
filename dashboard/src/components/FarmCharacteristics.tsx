@@ -28,7 +28,7 @@ type ScenarioParam =
   | 'runoff'
   | 'curing';
 
-type ScenarioCategory = 'soil' | 'wildlife' | 'irrigation' | 'harvest';
+type ScenarioCategory = 'soil' | 'wildlife' | 'water' | 'irrigationPractices' | 'harvest';
 
 const CATEGORIES: {
   id: ScenarioCategory;
@@ -38,30 +38,36 @@ const CATEGORIES: {
   {
     id: 'soil',
     label: 'Soil',
-    params: [{ id: 'soil', label: 'Soil Amendment' }],
+    params: [{ id: 'soil', label: 'Soil amendment' }],
   },
   {
     id: 'wildlife',
     label: 'Wildlife',
     params: [
       { id: 'wildlifeType', label: 'Wildlife Type' },
-      { id: 'fecesDepositLocations', label: 'Feces Deposit Locations' },
+      { id: 'fecesDepositLocations', label: 'Fecal Deposit Locations' },
       { id: 'wildlifeFrequency', label: 'Intrusion Frequency' },
     ],
   },
   {
-    id: 'irrigation',
-    label: 'Irrigation',
+    id: 'water',
+    label: 'Water Source',
     params: [
-      { id: 'irrigation', label: 'Irrigation Stop' },
-      { id: 'irrigationVolume', label: 'Irrigation Volume' },
       { id: 'regulatory', label: 'Water Quality' },
       { id: 'runoff', label: 'Rainfall Runoff' },
     ],
   },
   {
+    id: 'irrigationPractices',
+    label: 'Irrigation Practices',
+    params: [
+      { id: 'irrigationVolume', label: 'Irrigation Adjustment for Rainfall' },
+      { id: 'irrigation', label: 'Irrigation Stop' },
+    ],
+  },
+  {
     id: 'harvest',
-    label: 'Harvest',
+    label: 'Field Curing',
     params: [{ id: 'curing', label: 'Curing Duration' }],
   },
 ];
@@ -84,20 +90,28 @@ interface SegmentOption<T extends string | number> {
 }
 
 function SegmentedControl<T extends string | number>({
+  title,
   description,
+  note,
   value,
   options,
   onChange,
 }: {
+  title?: string;
   description: string;
+  note?: string;
   value: T;
   options: SegmentOption<T>[];
   onChange: (value: T) => void;
 }) {
   return (
     <div>
-      <p className="mb-3 text-lg leading-relaxed text-uga-dark-gray">{description}</p>
-      <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label={description}>
+      {title && <h4 className="text-lg font-semibold text-uga-black">{title}</h4>}
+      <p className={cn('text-lg leading-relaxed text-uga-dark-gray', title && 'mt-1', note ? 'mb-1' : 'mb-3')}>
+        {description}
+      </p>
+      {note && <p className="mb-3 text-lg leading-relaxed text-uga-dark-gray italic">{note}</p>}
+      <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label={title ?? description}>
         {options.map((opt) => {
           const selected = value === opt.value;
           return (
@@ -148,8 +162,11 @@ export function FarmCharacteristics() {
 
   return (
     <Card className="overflow-hidden">
-      <div className="bg-uga-navy px-4 py-2">
-        <h3 className="text-lg font-semibold text-white">Scenarios</h3>
+      <div className="bg-uga-navy px-4 py-3">
+        <h3 className="text-lg font-semibold text-white">Scenario Explorer</h3>
+        <p className="mt-0.5 text-base text-white/80">
+          Change one condition at a time. All other model conditions remain at baseline levels.
+        </p>
       </div>
 
       <div className="border-b border-uga-card-border bg-uga-light-gray px-3 py-2">
@@ -207,7 +224,8 @@ export function FarmCharacteristics() {
       <div className="bg-white px-4 py-4" role="tabpanel">
         {activeParam === 'soil' && (
           <SegmentedControl<SoilAmendment>
-            description="Soil Amendment: Materials added to the field to improve soil fertility or soil conditions, some of which may also introduce microbial contamination."
+            title="Soil amendment"
+            description="Which soil amendment do you typically apply to your field?"
             value={farmCharacteristics.soilAmendment}
             onChange={(soilAmendment) => setFarmCharacteristic('soilAmendment', soilAmendment)}
             options={[
@@ -220,7 +238,8 @@ export function FarmCharacteristics() {
 
         {activeParam === 'wildlifeType' && (
           <SegmentedControl<WildlifeType>
-            description="Wildlife Type: Select the common wildlife species that may enter the onion field and contribute fecal contamination."
+            title="Wildlife Type"
+            description="What wildlife do you commonly see in or around your onion fields?"
             value={farmCharacteristics.wildlifeType}
             onChange={(wildlifeType) => setFarmCharacteristic('wildlifeType', wildlifeType)}
             options={[
@@ -233,27 +252,29 @@ export function FarmCharacteristics() {
 
         {activeParam === 'fecesDepositLocations' && (
           <SegmentedControl<FecesDepositLocations>
-            description="Feces Deposit Locations: Set the number of randomly selected field locations affected by wildlife fecal deposits during each contamination event."
+            title="Fecal Deposit Locations"
+            description="How widespread are wildlife fecal deposits in your field?"
             value={farmCharacteristics.fecesDepositLocations}
             onChange={(fecesDepositLocations) =>
               setFarmCharacteristic('fecesDepositLocations', fecesDepositLocations)
             }
             options={[
-              { value: 1, label: '1 location (baseline)' },
-              { value: 9, label: '9 locations' },
+              { value: 1, label: '1 location per event' },
+              { value: 9, label: 'Multiple locations per event' },
             ]}
           />
         )}
 
         {activeParam === 'wildlifeFrequency' && (
           <SegmentedControl<WildlifeFrequencyDays>
-            description="Wildlife Intrusion Frequency: Set how often wildlife enters the field and deposits feces."
+            title="Intrusion Frequency"
+            description="How often do you typically see wildlife entering the field?"
             value={farmCharacteristics.wildlifeFrequencyDays}
             onChange={(wildlifeFrequencyDays) =>
               setFarmCharacteristic('wildlifeFrequencyDays', wildlifeFrequencyDays)
             }
             options={[
-              { value: 1, label: 'Every day (baseline)' },
+              { value: 1, label: 'Daily' },
               { value: 3, label: 'Every 3 days' },
               { value: 7, label: 'Every 7 days' },
             ]}
@@ -262,12 +283,13 @@ export function FarmCharacteristics() {
 
         {activeParam === 'irrigation' && (
           <SegmentedControl<IrrigationStopDays>
-            description="Irrigation Stop: Set how many days before onion root undercutting irrigation is stopped."
+            title="Irrigation Stop"
+            description="When do you typically stop irrigation before root undercutting?"
             value={farmCharacteristics.irrigationStopDays}
             onChange={(irrigationStopDays) => setFarmCharacteristic('irrigationStopDays', irrigationStopDays)}
             options={[
-              { value: 0, label: '0 days' },
-              { value: 7, label: '7 days (baseline)' },
+              { value: 0, label: 'Same day' },
+              { value: 7, label: '7 days' },
               { value: 10, label: '10 days' },
             ]}
           />
@@ -275,54 +297,59 @@ export function FarmCharacteristics() {
 
         {activeParam === 'irrigationVolume' && (
           <SegmentedControl<IrrigationVolumeFactor>
-            description="Irrigation Volume: Scale the water depth applied in establishment, vegetative, and bulbing stages relative to the baseline schedule."
+            title="Irrigation Adjustment for Rainfall"
+            description="How should irrigation be adjusted based on rainfall?"
             value={farmCharacteristics.irrigationVolumeFactor}
             onChange={(irrigationVolumeFactor) =>
               setFarmCharacteristic('irrigationVolumeFactor', irrigationVolumeFactor)
             }
             options={[
-              { value: 1, label: '100% (baseline)' },
-              { value: 0.75, label: '75% (−25%)' },
-              { value: 0.5, label: '50% (−50%)' },
-              { value: 0.25, label: '25% (−75%)' },
+              { value: 1, label: '100% of recommended irrigation amount' },
+              { value: 0.75, label: '75% of recommended amount' },
+              { value: 0.5, label: '50% of recommended amount' },
+              { value: 0.25, label: '25% of recommended amount' },
             ]}
           />
         )}
 
         {activeParam === 'regulatory' && (
           <SegmentedControl<RegulatoryStandard>
-            description="Water Quality: Select a controlled FDA outcome or unmanaged water. Unmanaged water is not screened for compliance and each sample has a 60% chance of being impacted."
+            title="Water Quality"
+            description="How would you describe the quality of your irrigation water?"
+            note="Model reference threshold: GM ≤126 and STV ≤410 CFU/100 mL, based on the microbial water quality criteria established in the 2015 FDA Produce Safety Rule."
             value={farmCharacteristics.regulatoryStandard}
             onChange={(regulatoryStandard) => setFarmCharacteristic('regulatoryStandard', regulatoryStandard)}
             options={[
-              { value: 'fda_approved', label: 'Meets FDA criteria (baseline)' },
-              { value: 'non_fda_approved', label: 'Does not meet FDA criteria' },
-              { value: 'unmanaged', label: 'Unmanaged water (60% impacted)' },
+              { value: 'fda_approved', label: 'Meets model reference threshold' },
+              { value: 'non_fda_approved', label: 'Exceeds model reference threshold' },
+              { value: 'unmanaged', label: 'Not sure / Not tested' },
             ]}
           />
         )}
 
         {activeParam === 'runoff' && (
           <SegmentedControl<RainfallRunoff>
-            description="Rainfall Runoff: Include rainfall-driven CFU gain in irrigation source water (screened samples plus runoff contribution), or use screened source samples only."
+            title="Rainfall Runoff"
+            description="Can rainfall runoff enter your irrigation water source?"
             value={farmCharacteristics.rainfallRunoff}
             onChange={(rainfallRunoff) => setFarmCharacteristic('rainfallRunoff', rainfallRunoff)}
             options={[
-              { value: 'with_runoff', label: 'With runoff (baseline)' },
-              { value: 'no_runoff', label: 'No runoff' },
+              { value: 'with_runoff', label: 'Yes' },
+              { value: 'no_runoff', label: 'No' },
             ]}
           />
         )}
 
         {activeParam === 'curing' && (
           <SegmentedControl<CuringDays>
-            description="Curing Duration: Set the number of days onions remain in the field between root undercutting and harvest."
+            title="Curing Duration"
+            description="How long do you typically leave onions in the field after root undercutting before harvest?"
             value={farmCharacteristics.curingDays}
             onChange={(curingDays) => setFarmCharacteristic('curingDays', curingDays)}
             options={[
               { value: 0, label: '0 days' },
               { value: 3, label: '3 days' },
-              { value: 7, label: '7 days (baseline)' },
+              { value: 7, label: '7 days' },
               { value: 14, label: '14 days' },
             ]}
           />
