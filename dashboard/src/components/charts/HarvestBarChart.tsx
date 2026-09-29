@@ -8,6 +8,7 @@ interface HarvestBarChartProps {
   threshByMonth: number[][];
   title: string;
   subtitle?: string;
+  headerClassName?: string;
 }
 
 function formatAxisPct(v: number): string {
@@ -23,7 +24,7 @@ function thresholdItemOrder(dataKey: unknown): number {
   return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
 }
 
-export function HarvestBarChart({ threshByMonth, title, subtitle }: HarvestBarChartProps) {
+export function HarvestBarChart({ threshByMonth, title, subtitle, headerClassName }: HarvestBarChartProps) {
   const chartData = HARVEST_MONTH_NAMES.map((month, i) => {
     const row = threshByMonth[HARVEST_INDICES[i]] ?? [0, 0, 0, 0];
     return {
@@ -36,8 +37,8 @@ export function HarvestBarChart({ threshByMonth, title, subtitle }: HarvestBarCh
   });
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full">
+      <CardHeader className={headerClassName}>
         <CardTitle>{title}</CardTitle>
         {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
       </CardHeader>

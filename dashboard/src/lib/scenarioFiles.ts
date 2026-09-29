@@ -10,9 +10,9 @@ export const SCENARIO_JSON_FILES = [
   'baseline_feces_9.json',
   'baseline_curing_0.json',
   'baseline_curing_3.json',
-  'baseline_curing_14.json',
+  'baseline_curing_14_pond_well_50pct.json',
   'baseline_wildlife_3.json',
-  'baseline_wildlife_7.json',
+  'Wildlife_freq_7.json',
   'S_irrigation_stop at 0 d.json',
   'S_irrigation_stop at 10 d.json',
   'S_irrigation_FDA_not approved.json',
@@ -63,7 +63,7 @@ export function resolveScenarioFilename(config: FarmCharacteristicsConfig): stri
       return null;
     case 'wildlifeFrequencyDays':
       if (config.wildlifeFrequencyDays === 3) return 'baseline_wildlife_3.json';
-      if (config.wildlifeFrequencyDays === 7) return 'baseline_wildlife_7.json';
+      if (config.wildlifeFrequencyDays === 7) return 'Wildlife_freq_7.json';
       return null;
     case 'irrigationStopDays':
       if (config.irrigationStopDays === 0) return 'S_irrigation_stop at 0 d.json';
@@ -81,7 +81,7 @@ export function resolveScenarioFilename(config: FarmCharacteristicsConfig): stri
     case 'curingDays':
       if (config.curingDays === 0) return 'baseline_curing_0.json';
       if (config.curingDays === 3) return 'baseline_curing_3.json';
-      if (config.curingDays === 14) return 'baseline_curing_14.json';
+      if (config.curingDays === 14) return 'baseline_curing_14_pond_well_50pct.json';
       return null;
     case 'rainfallRunoff':
       if (config.rainfallRunoff === 'no_runoff') return 'S_irrigation_runoff_no.json';

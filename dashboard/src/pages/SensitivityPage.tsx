@@ -151,23 +151,33 @@ export function SensitivityPage() {
                 step={1}
                 value={safeIdx}
                 onChange={(e) => setLevelIdx(Number(e.target.value))}
-                className="h-2 w-full cursor-pointer appearance-none rounded-full bg-uga-mid-gray accent-uga-red"
+                className={cn(
+                  'h-6 w-full cursor-pointer appearance-none bg-transparent',
+                  '[&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-uga-mid-gray',
+                  '[&::-webkit-slider-thumb]:-mt-[5px] [&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-uga-red',
+                  '[&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-uga-mid-gray',
+                  '[&::-moz-range-thumb]:h-[18px] [&::-moz-range-thumb]:w-[18px] [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-uga-red',
+                )}
                 aria-label={`${meta?.label ?? 'Sensitivity'} level`}
               />
-              <div className="mt-2 flex justify-between text-sm text-uga-dark-gray">
-                {labels.map((label, i) => (
-                  <button
-                    key={label}
-                    type="button"
-                    onClick={() => setLevelIdx(i)}
-                    className={cn(
-                      'min-w-0 flex-1 text-center',
-                      i === safeIdx ? 'font-semibold text-uga-red' : 'hover:text-uga-black',
-                    )}
-                  >
-                    {label}
-                  </button>
-                ))}
+              <div className="relative mt-1 h-7 text-sm text-uga-dark-gray">
+                {labels.map((label, i) => {
+                  const ratio = labels.length <= 1 ? 0 : i / (labels.length - 1);
+                  return (
+                    <button
+                      key={label}
+                      type="button"
+                      onClick={() => setLevelIdx(i)}
+                      style={{ left: `calc(${ratio * 100}% + ${(0.5 - ratio) * 18}px)` }}
+                      className={cn(
+                        'absolute -translate-x-1/2 whitespace-nowrap',
+                        i === safeIdx ? 'font-semibold text-uga-red' : 'hover:text-uga-black',
+                      )}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -198,19 +208,22 @@ export function SensitivityPage() {
             lines={yearRoundLines}
           />
 
-          <HarvestBarChart
-            threshByMonth={selectedThresh}
-            title={`Harvest Contamination at ${selectedLabel}`}
-            subtitle="% of plants exceeding 1 / 5 / 10 / 20 CFU on the onion surface (Jan–May)"
-          />
-
-          {showReference && (
+          <div className={cn('grid grid-cols-1 items-stretch gap-4', showReference && 'lg:grid-cols-2')}>
             <HarvestBarChart
-              threshByMonth={referenceThresh}
-              title={`Harvest Contamination at reference ${refLabel}`}
-              subtitle="Same thresholds at the 100% level of this sweep, for comparison"
+              threshByMonth={selectedThresh}
+              title={`Harvest Contamination at ${selectedLabel}`}
+              subtitle="% of plants exceeding 1 / 5 / 10 / 20 CFU on the onion surface (Jan–May)"
+              headerClassName={showReference ? 'min-h-36' : undefined}
             />
-          )}
+            {showReference && (
+              <HarvestBarChart
+                threshByMonth={referenceThresh}
+                title={`Harvest Contamination at reference ${refLabel}`}
+                subtitle="Same thresholds at the 100% level of this sweep, for comparison"
+                headerClassName="min-h-36"
+              />
+            )}
+          </div>
 
           <InsightBox>
             {sweep.thresholdByMonth

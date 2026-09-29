@@ -82,17 +82,19 @@ export function BaselinePage() {
       <FarmCharacteristics />
 
       {/* KPI groups */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div>
+      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
+        <div className="flex h-full flex-col">
           <h3 className="mb-3 text-lg font-semibold text-uga-black">Predicted Harvest Outcomes</h3>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2">
             <MetricCard
+              className="h-full"
               label="Predicted E. coli per onion at harvest"
               value={medianOnionCFU.toFixed(3)}
               unit="CFU/onion"
               subtext="Median onion-surface generic E. coli across all plants and simulation runs"
             />
             <MetricCard
+              className="h-full"
               label="Predicted contaminated onions at harvest"
               value={overallPrevalencePct.toFixed(3)}
               unit="%"
@@ -101,16 +103,17 @@ export function BaselinePage() {
           </div>
         </div>
 
-        <div>
+        <div className="flex h-full flex-col">
           <h3 className="mb-3 text-lg font-semibold text-uga-black">Estimated Source Contribution</h3>
           {hasSourceContribution ? (
             <SourceDonut
+              className="min-h-0 flex-1"
               irrigationPct={sourceContribution.irrigationPct}
               wildlifePct={sourceContribution.wildlifePct}
               carryoverPct={sourceContribution.carryoverPct}
             />
           ) : (
-            <div className="rounded-md border border-uga-card-border bg-white px-4 py-3 text-lg text-uga-dark-gray">
+            <div className="flex-1 rounded-md border border-uga-card-border bg-white px-4 py-3 text-lg text-uga-dark-gray">
               Re-export baseline JSON to populate source attribution (wildlife / irrigation / carryover).
             </div>
           )}

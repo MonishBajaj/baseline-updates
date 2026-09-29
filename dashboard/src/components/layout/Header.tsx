@@ -1,3 +1,5 @@
+import { withItalicEColi } from '@/lib/eColi';
+
 export function Header() {
   return (
     <header className="fixed top-0 right-0 left-0 z-50 grid h-16 grid-cols-3 items-center bg-uga-red px-6 shadow-md">
@@ -12,7 +14,7 @@ export function Header() {
       </div>
 
       <div className="hidden text-center sm:block">
-        <h1 className="text-xl font-bold tracking-wide text-white">Onion E. coli Risk Dashboard</h1>
+        <h1 className="text-xl font-bold tracking-wide text-white">{withItalicEColi('Onion E. coli Risk Dashboard')}</h1>
         <p className="text-base text-white/70">Preharvest system model</p>
       </div>
     </header>

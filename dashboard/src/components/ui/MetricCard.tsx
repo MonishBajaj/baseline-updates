@@ -1,3 +1,4 @@
+import { withItalicEColi } from '@/lib/eColi';
 import { cn } from '@/lib/utils';
 
 interface MetricCardProps {
@@ -17,7 +18,7 @@ export function MetricCard({ label, value, unit, subtext, changePct, className }
         className,
       )}
     >
-      <p className="text-base font-semibold uppercase tracking-wide text-uga-dark-gray">{label}</p>
+      <p className="text-base font-semibold uppercase tracking-wide text-uga-dark-gray">{withItalicEColi(label)}</p>
       <div className="mt-2 flex items-baseline gap-1.5">
         <span className="text-3xl font-bold text-uga-black">{value}</span>
         {unit && <span className="text-lg text-uga-dark-gray">{unit}</span>}
@@ -28,7 +29,7 @@ export function MetricCard({ label, value, unit, subtext, changePct, className }
           {changePct.toFixed(1)}% vs. baseline
         </p>
       )}
-      {subtext && <p className="mt-1 text-base text-uga-dark-gray">{subtext}</p>}
+      {subtext && <p className="mt-1 text-base text-uga-dark-gray">{withItalicEColi(subtext)}</p>}
     </div>
   );
 }

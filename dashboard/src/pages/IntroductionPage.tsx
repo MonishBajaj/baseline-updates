@@ -1,4 +1,5 @@
 import { Card, CardContent } from '@/components/ui/Card';
+import { withItalicEColi } from '@/lib/eColi';
 import { withBase } from '@/lib/publicUrl';
 
 const SCOPE_ITEMS = [
@@ -36,8 +37,8 @@ export function IntroductionPage() {
           <div className="mt-1.5 space-y-3 text-lg leading-relaxed text-uga-dark-gray">
             <p>
               This interactive model evaluates how irrigation water, wildlife intrusion, field conditions, and
-              production practices may influence E. coli contamination during onion production in the Southeastern
-              U.S.
+              production practices may influence <em className="italic">E. coli</em> contamination during onion production
+              in the Southeastern U.S.
             </p>
             <p>
               Use the dashboard to explore baseline conditions, test alternative scenarios, and identify factors that
@@ -57,7 +58,7 @@ export function IntroductionPage() {
                 className="rounded-md border border-uga-card-border bg-uga-light-gray px-3.5 py-3"
               >
                 <dt className="text-base font-medium text-uga-dark-gray">{item.label}</dt>
-                <dd className="mt-0.5 text-lg font-semibold leading-snug text-uga-black">{item.value}</dd>
+                <dd className="mt-0.5 text-lg font-semibold leading-snug text-uga-black">{withItalicEColi(item.value)}</dd>
               </div>
             ))}
           </dl>
@@ -69,9 +70,10 @@ export function IntroductionPage() {
       </Card>
 
       <div className="rounded-md border border-l-4 border-uga-card-border border-l-uga-red bg-uga-red/5 p-4">
-        <h3 className="text-lg font-semibold text-uga-red">About Generic E. coli</h3>
+        <h3 className="text-lg font-semibold text-uga-red">{withItalicEColi('About Generic E. coli')}</h3>
         <p className="mt-1.5 text-lg leading-relaxed text-uga-dark-gray">
-          Generic E. coli is used as an indicator of fecal contamination and environmental sanitary conditions. It is
+          Generic <em className="italic">E. coli</em> is used as an indicator of fecal contamination and environmental
+          sanitary conditions. It is
           not interpreted as a direct measure of the presence or concentration of specific foodborne pathogens. The
           indicator is used to evaluate conditions that may be relevant to enteric pathogen contamination, rather than
           to predict a specific pathogen directly.

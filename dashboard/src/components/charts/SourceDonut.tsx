@@ -1,4 +1,6 @@
 import { Card, CardContent, CardHeader, CardSubtitle, CardTitle } from '@/components/ui/Card';
+import { withItalicEColi } from '@/lib/eColi';
+import { cn } from '@/lib/utils';
 
 interface SourceDonutProps {
   irrigationPct: number;
@@ -29,7 +31,8 @@ export function SourceDonut({
   wildlifeLabel = 'Wildlife',
   title,
   subtitle,
-}: SourceDonutProps) {
+  className,
+}: SourceDonutProps & { className?: string }) {
   const showCarryover = carryoverPct !== undefined && carryoverPct >= 0.5;
   const segments: Segment[] = [
     {
@@ -59,7 +62,7 @@ export function SourceDonut({
   const summary = segments.map((segment) => `${segment.value.toFixed(1)}% ${segment.name}`).join(', ');
 
   return (
-    <Card className="self-start">
+    <Card className={cn('h-full', className)}>
       {(title || subtitle) && (
         <CardHeader>
           {title && <CardTitle>{title}</CardTitle>}
@@ -102,7 +105,7 @@ export function SourceDonut({
                   {segment.value.toFixed(1)}%
                 </p>
                 <p className="mt-1 text-base text-uga-dark-gray">{segment.name}</p>
-                <p className="mt-1 max-w-56 text-base leading-snug text-uga-dark-gray">{segment.detail}</p>
+                <p className="mt-1 max-w-56 text-base leading-snug text-uga-dark-gray">{withItalicEColi(segment.detail)}</p>
               </div>
             );
           })}
