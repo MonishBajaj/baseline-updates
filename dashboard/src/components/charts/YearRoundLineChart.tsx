@@ -18,11 +18,12 @@ interface YearRoundLineChartProps {
   height?: number;
 }
 
-function SoilYAxisLabel({
-  viewBox,
-}: {
-  viewBox?: { x?: number; y?: number; width?: number; height?: number };
+function SoilYAxisLabel(props: {
+  viewBox?: Partial<{ x: number; y: number; width: number; height: number }> | unknown;
 }) {
+  const viewBox = props.viewBox as
+    | Partial<{ x: number; y: number; width: number; height: number }>
+    | undefined;
   const x = (viewBox?.x ?? 0) + 16;
   const y = (viewBox?.y ?? 0) + (viewBox?.height ?? 0) / 2;
   return (
