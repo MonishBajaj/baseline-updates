@@ -6,6 +6,7 @@ import { useScenarioStore } from '@/store/scenarioStore';
 import { BaselinePage } from '@/pages/BaselinePage';
 import { IntroductionPage } from '@/pages/IntroductionPage';
 import { ComparisonPage } from '@/pages/ComparisonPage';
+import { ScenarioComparisonPage } from '@/pages/ScenarioComparisonPage';
 import { SensitivityPage } from '@/pages/SensitivityPage';
 import { ReferencesPage } from '@/pages/ReferencesPage';
 
@@ -53,6 +54,7 @@ function App() {
           {activeTab === 'baseline' && <BaselinePage />}
           {activeTab === 'sensitivity' && <SensitivityPage />}
           {activeTab === 'comparison' && <ComparisonPage />}
+          {activeTab === 'scenarioComparison' && <ScenarioComparisonPage />}
           {activeTab === 'references' && <ReferencesPage />}
         </div>
       </main>

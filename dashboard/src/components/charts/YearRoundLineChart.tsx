@@ -18,6 +18,30 @@ interface YearRoundLineChartProps {
   height?: number;
 }
 
+function SoilYAxisLabel({
+  viewBox,
+}: {
+  viewBox?: { x?: number; y?: number; width?: number; height?: number };
+}) {
+  const x = (viewBox?.x ?? 0) + 16;
+  const y = (viewBox?.y ?? 0) + (viewBox?.height ?? 0) / 2;
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      fill="#4a4a4a"
+      fontSize={16}
+      transform={`rotate(-90, ${x}, ${y})`}
+    >
+      <tspan fontStyle="italic">E. coli</tspan>
+      <tspan>(log</tspan>
+      <tspan dy="5" fontSize="11">10</tspan>
+      <tspan dy="-5">CFU/g) in the soil</tspan>
+    </text>
+  );
+}
+
 export function YearRoundLineChart({ lines, title, subtitle, height = 300 }: YearRoundLineChartProps) {
   const chartData = Array.from({ length: 365 }, (_, i) => {
     const point: Record<string, number> = { day: i + 1 };
@@ -45,16 +69,9 @@ export function YearRoundLineChart({ lines, title, subtitle, height = 300 }: Yea
               tick={{ fontSize: 18 }}
             />
             <YAxis
-              width={64}
+              width={78}
               tickMargin={10}
-              label={{
-                value: 'log10 (CFU/g) soil',
-                angle: -90,
-                position: 'left',
-                offset: 18,
-                fontSize: 20,
-                style: { textAnchor: 'middle' },
-              }}
+              label={{ content: SoilYAxisLabel }}
               tick={{ fontSize: 18 }}
             />
             <Tooltip

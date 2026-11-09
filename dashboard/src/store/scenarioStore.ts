@@ -1,7 +1,13 @@
 import { create } from 'zustand';
 import type { ActiveWildlifeParameter, FarmCharacteristicsConfig } from '@/types';
 
-export type PageId = 'introduction' | 'baseline' | 'sensitivity' | 'comparison' | 'references';
+export type PageId =
+  | 'introduction'
+  | 'baseline'
+  | 'sensitivity'
+  | 'comparison'
+  | 'scenarioComparison'
+  | 'references';
 export type Source = 'wildlife' | 'irrigation';
 
 export const DEFAULT_FARM_CHARACTERISTICS: FarmCharacteristicsConfig = {

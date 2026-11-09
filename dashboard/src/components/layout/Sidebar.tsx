@@ -1,4 +1,4 @@
-import { BookOpen, BarChart2, TrendingUp, GitCompare, Library } from 'lucide-react';
+import { BookOpen, BarChart2, TrendingUp, GitCompare, Layers, Library } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useScenarioStore, type PageId } from '@/store/scenarioStore';
 import { useDataStore } from '@/store/dataStore';
@@ -16,7 +16,8 @@ const navItems: NavItem[] = [
   { id: 'introduction', label: 'Overview', icon: <BookOpen size={16} />, desc: 'Model scope and structure', requiresScenarioData: false },
   { id: 'baseline', label: 'Baseline & Scenarios', icon: <BarChart2 size={16} />, desc: 'Explore farm conditions', requiresScenarioData: false },
   { id: 'sensitivity', label: 'Sensitivity Analysis', icon: <TrendingUp size={16} />, desc: 'Explore parameter effects', requiresScenarioData: true },
-  { id: 'comparison', label: 'Scenario Comparison', icon: <GitCompare size={16} />, desc: 'Compare selected scenarios', requiresScenarioData: true },
+  { id: 'comparison', label: 'Sensitivity Analysis Comparison', icon: <GitCompare size={16} />, desc: 'Compare selected sensitivity analysis', requiresScenarioData: true },
+  { id: 'scenarioComparison', label: 'Scenario Comparison', icon: <Layers size={16} />, desc: 'Compare selected scenarios', requiresScenarioData: false },
   { id: 'references', label: 'Model & Data Sources', icon: <Library size={16} />, desc: 'Assumptions and references', requiresScenarioData: false },
 ];
 

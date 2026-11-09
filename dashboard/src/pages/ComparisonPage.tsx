@@ -150,7 +150,7 @@ export function ComparisonPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold text-uga-black">Scenario Comparison</h2>
+          <h2 className="text-3xl font-bold text-uga-black">Sensitivity Analysis Comparison</h2>
           <p className="text-lg text-uga-dark-gray">
             Compare intensity and prevalence sweeps side by side.
           </p>
@@ -168,7 +168,7 @@ export function ComparisonPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-uga-black">Scenario Comparison</h2>
+        <h2 className="text-3xl font-bold text-uga-black">Sensitivity Analysis Comparison</h2>
         <p className="text-lg text-uga-dark-gray">
           Pick up to four sensitivity sweeps and levels. Year-round soil CFU is overlaid, and harvest
           threshold charts sit side by side.
