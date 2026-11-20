@@ -1,20 +1,11 @@
 services:
+  # Preferred: Docker builds the Vite app then serves with gunicorn.
   - type: web
     name: baseline-updates
-    runtime: python
+    runtime: docker
     plan: free
-    buildCommand: |
-      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-      export NVM_DIR="$HOME/.nvm"
-      . "$NVM_DIR/nvm.sh"
-      nvm install 20
-      nvm use 20
-      cd dashboard
-      npm ci
-      VITE_DATA_MODE=static VITE_BASE_PATH=/ npm run build:static
-      cd ..
-      pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
-      - key: PYTHON_VERSION
-        value: "3.12.8"
+      - key: PORT
+        value: "10000"

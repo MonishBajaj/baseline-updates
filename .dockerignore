@@ -1,0 +1,17 @@
+.git
+.github
+**/node_modules
+**/dist
+**/__pycache__
+**/.venv
+**/venv
+**/.env
+**/.env.*
+dashboard/Img
+export
+export (2)
+*.m
+*.mat
+*.asv
+.DS_Store
+*.log
